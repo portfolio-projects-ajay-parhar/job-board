@@ -13,14 +13,14 @@
 - [ ] Node.js ≥ 18, `gh` CLI authenticated
 
 ## Phase 1 — Setup & Database
-- [ ] Next.js scaffold (Next 16, TS, Tailwind v4, src dir)
-- [ ] Dependencies installed (Prisma 6, NextAuth v4, TanStack Query, Zod, Resend, sanitize-html, AWS S3 + presigner, Cloudinary, Vitest, …)
-- [ ] `.env.local` + `.env.example` (all storage/email vars)
-- [ ] Prisma schema + `init` migration (User w/ `CANDIDATE|EMPLOYER|ADMIN`, CandidateProfile, Company, Job + enums, Resume, Application, ApplicationEvent, SavedJob, EmailLog; all PLAN.md indexes)
-- [ ] **Raw-SQL FTS migration** — `searchVector` generated tsvector (title A / description B / location C) + GIN index; `pg_trgm` extension + trigram GIN on `Job.title`
-- [ ] Singleton Prisma client
-- [ ] Seed: 1 ADMIN, 6 EMPLOYERs (1 unverified company), 8 CANDIDATEs, 6 companies, 36 jobs (2 DRAFT, 3 CLOSED, 4 featured, deadline edge cases), dummy-PDF resumes, applications across all statuses + event history, saved jobs
-- [ ] `next.config.ts` image config + base layout + `src/lib/salary.ts`
+- [x] Next.js scaffold (Next 16, TS, Tailwind v4, src dir)
+- [x] Dependencies installed (Prisma 6, NextAuth v4, TanStack Query, Zod, Resend, sanitize-html, AWS S3 + presigner, Cloudinary, Vitest, …)
+- [x] `.env.local` + `.env.example` (all storage/email vars) — local dev uses Docker Postgres (`jobboard-db` container)
+- [x] Prisma schema + `init` migration (User w/ `CANDIDATE|EMPLOYER|ADMIN`, CandidateProfile, Company, Job + enums, Resume, Application, ApplicationEvent, SavedJob, EmailLog; all PLAN.md indexes)
+- [x] **Raw-SQL FTS migration** — `searchVector` generated tsvector (title A / description B / location C) + GIN index; `pg_trgm` extension + trigram GIN on `Job.title` (column also declared `Unsupported("tsvector")` in schema to prevent drift-drops)
+- [x] Singleton Prisma client
+- [x] Seed: 1 ADMIN, 6 EMPLOYERs (1 unverified company), 8 CANDIDATEs, 6 companies, 36 jobs (2 DRAFT, 3 CLOSED, 4 featured, deadline edge cases), dummy-PDF resumes, applications across all statuses + event history, saved jobs
+- [x] `next.config.ts` image config + base layout + `src/lib/salary.ts` (+ 12 passing Vitest tests for salary helpers)
 
 ## Phase 2 — Auth & Roles
 - [ ] NextAuth options + handler (Credentials + Prisma adapter + JWT)

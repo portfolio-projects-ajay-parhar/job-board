@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Providers } from "@/components/providers";
+import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,7 +35,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="flex min-h-full flex-col bg-slate-50">
+        <Providers>
+          <SiteHeader />
+          <main className="flex-1">{children}</main>
+          <footer className="border-t border-slate-200 bg-white py-6 text-center text-sm text-slate-500">
+            © {new Date().getFullYear()} JobBoard — built with Next.js, Prisma &amp; PostgreSQL
+          </footer>
+        </Providers>
+      </body>
     </html>
   );
 }
