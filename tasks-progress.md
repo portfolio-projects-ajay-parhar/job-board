@@ -54,12 +54,12 @@
 - [x] Unit tests: magic-byte validation, 5MB+1 boundary, 415 semantics, key generation (no client filename), filename sanitizationte/MIME/size validation, primary-resume logic
 
 ## Phase 6 — Full-Text Search, Filters & Pagination
-- [ ] Search query builder over `searchVector` (`websearch_to_tsquery`, `ts_rank` weighting, `ts_headline` snippets) + trigram fallback for partial words
-- [ ] Filters: type, locationType, experienceLevel, category, salary range (normalized to cents), remote, postedWithin
-- [ ] Sorts: `relevant` (default with q) | `newest` | `salary_desc`
-- [ ] **Offset pagination** (`LIMIT/OFFSET`, total via `COUNT(*) OVER()`)
-- [ ] Public `GET /api/jobs` (PUBLISHED only) + shareable URL params on `/jobs`
-- [ ] Unit tests: SQL composition per filter combo, salary normalization, pagination math
+- [x] Search builder `src/lib/search.ts` — pure `(params) => {sql, args}`, everything parameterized; `websearch_to_tsquery` + weighted `ts_rank`, `pg_trgm` partial-match ILIKE arm (verified live: `reac` finds React roles)
+- [x] Filters: type, locationType, experienceLevel, category, min/max monthly-normalized cents, remote shortcut, postedWithin (24h/7d/30d); sorts: relevant (default with q) | newest | salary_desc
+- [x] **Offset pagination** (`LIMIT/OFFSET`, total via `COUNT(*) OVER()`)
+- [x] Public `GET /api/jobs` (PUBLISHED only, zod params — SQLi probe safe) + shareable URL params on `/jobs` (debounced 300ms controls, pagination with totals, empty state)
+- [x] `salaryMonthlyCents` generated column + index (raw migration); `EXPLAIN` uses BitmapOr over both GIN indexes
+- [x] Unit tests: SQL composition per filter combo, parameterization safety, pagination math + cap, salary normalization across periods
 
 ## Phase 7 — Applications & Hiring Pipeline
 - [ ] `POST /api/jobs/[id]/apply` — guards (PUBLISHED, deadline not passed, resume ownership) + unique (jobId, candidateId) 409; Application + first ApplicationEvent in one transaction
