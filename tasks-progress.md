@@ -62,20 +62,21 @@
 - [x] Unit tests: SQL composition per filter combo, parameterization safety, pagination math + cap, salary normalization across periods
 
 ## Phase 7 — Applications & Hiring Pipeline
-- [ ] `POST /api/jobs/[id]/apply` — guards (PUBLISHED, deadline not passed, resume ownership) + unique (jobId, candidateId) 409; Application + first ApplicationEvent in one transaction
-- [ ] Application status machine: `SUBMITTED→IN_REVIEW→INTERVIEW→OFFER→HIRED`; REJECTED from non-terminal; WITHDRAWN by candidate; terminal: HIRED/REJECTED/WITHDRAWN
-- [ ] Employer status-change PATCH (422 on illegal) + ApplicationEvent (from→to, actor, note) in one transaction
-- [ ] Employer applications lists (per-job + cross-job, status filter, offset pagination)
-- [ ] Candidate withdraw route
-- [ ] Employer resume-download authorization via Application linkage
-- [ ] Unit tests: status machine, concurrent duplicate apply (409)
+- [x] `POST /api/jobs/[slug]/apply` — guards (PUBLISHED 409, deadline 422 `DEADLINE_PASSED`, resume ownership 403) + unique (jobId, candidateId) → 409 `ALREADY_APPLIED` (P2002 caught in-transaction); Application + first ApplicationEvent in one transaction
+- [x] Application status machine: strictly-forward flow; REJECTED from any live stage; WITHDRAWN until HIRED; terminal: HIRED/REJECTED/WITHDRAWN (all 49 pairs unit-tested)
+- [x] Employer status-change PATCH (422 `INVALID_TRANSITION` incl. current status) + ApplicationEvent (from→to, actor, note) in one transaction
+- [x] Employer applications lists (per-job + cross-job, status filter, offset pagination, candidate summaries)
+- [x] Candidate withdraw route (machine-validated)
+- [x] Employer resume-download authorization via Application linkage (Phase 5 matrix, employer path verified)
+- [x] Verified live (scripts/verify-phase7.mjs): apply 201/409, deadline 422, **concurrent duplicate apply → exactly one 201 + one 409**, audit chain, cross-company 403, withdraw machine
 
 ## Phase 8 — Saved Jobs & Email Notifications
-- [ ] Saved-jobs toggle APIs (idempotent via unique constraint) + saved-jobs page
-- [ ] Email service (Resend) + EmailLog per send; graceful SKIPPED when unconfigured
-- [ ] Templates: welcome, application-received (→ employer), application-confirmation (→ candidate), application-status-changed (→ candidate)
-- [ ] Sends wired post-commit into apply + status-change paths (never block the response)
-- [ ] Unit tests: template rendering, EmailLog statuses
+- [x] Saved-jobs APIs (GET/POST/PUT/DELETE, idempotent via unique constraint — verified live) + `/account/saved` page with unsave + apply shortcuts
+- [x] Email service (Resend) + EmailLog per send; graceful SKIPPED when unconfigured; never throws
+- [x] Templates: welcome-candidate/employer, application-received (→ employer), application-confirmation (→ candidate), application-status-changed (→ candidate); all data HTML-escaped
+- [x] Sends wired post-commit into register / apply / status-change paths (never block the response)
+- [x] Verified live: register → apply → status change → 4 EmailLog rows with correct templates/recipients (SKIPPED in dev)
+- [x] Unit tests: template rendering, interpolation, script/img injection escaping
 
 ## Phase 9 — Storefront Pages
 - [ ] Public layout + navbar + footer
