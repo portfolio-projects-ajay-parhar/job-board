@@ -1,17 +1,22 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import type { Metadata } from "next";
+import { ProfileEditor } from "./profile-editor";
+import { ResumeManager } from "./resume-manager";
 
-// Placeholder — full profile editor + resume manager arrive in Phase 5/10.
-export default async function ProfilePage() {
-  const session = await getServerSession(authOptions);
-  if (!session) return null;
+export const metadata: Metadata = { title: "Your profile" };
+
+export default function ProfilePage() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-slate-900">Your profile</h1>
-      <p className="mt-2 text-slate-600">
-        Signed in as {session.user.name} ({session.user.email}).
-      </p>
-      <p className="mt-4 text-sm text-slate-500">Profile editor and resume manager coming in Phase 5/10.</p>
+      <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-5">
+        <div className="lg:col-span-3">
+          <ProfileEditor />
+        </div>
+        <div className="lg:col-span-2">
+          <ResumeManager />
+        </div>
+      </div>
     </div>
   );
 }
+

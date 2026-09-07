@@ -39,11 +39,12 @@
 - [x] Unit tests: storage factory by env, local round-trip + signed-link tamper/expiry, non-image/magic-byte/oversize rejection, filename sanitization
 
 ## Phase 4 — Job CRUD & Publishing
-- [ ] `POST /api/employer/jobs` (zod, unique slug, sanitized rich text, salary in cents, DRAFT/PUBLISHED)
-- [ ] `PATCH` edit + `PATCH /status` job status machine (DRAFT→PUBLISHED→CLOSED→reopen, ARCHIVED terminal)
-- [ ] `DELETE` soft-archive only (applications preserved)
-- [ ] Public `GET /api/jobs/[slug]` (visibility rules, view count)
-- [ ] Employer jobs table + new/edit job form
+- [x] `POST /api/employer/jobs` (zod, unique slug, sanitized rich text, salary in cents, DRAFT/PUBLISHED) — verified live incl. `<script>` stripped, `-2` slug on duplicates
+- [x] `PATCH` edit + `PATCH /status` job status machine (DRAFT→PUBLISHED→CLOSED→reopen, ARCHIVED terminal) — illegal DRAFT→CLOSED → 422 verified
+- [x] `DELETE` soft-archive only (applications preserved)
+- [x] Public `GET /api/jobs/[slug]` (visibility rules: DRAFT 404 public / 200 owner; view count)
+- [x] Employer jobs table + new/edit job form — cross-employer edit → 403 verified
+- [x] Unit tests: status machine (every legal/illegal pair), slug helper, sanitize-html pipeline
 
 ## Phase 5 — Candidate Profiles & Resume Uploads
 - [ ] Candidate profile API + editor (skills array, URL validation)

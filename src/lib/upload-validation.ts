@@ -34,12 +34,12 @@ function validate(
 ): Sniff {
   if (buffer.length === 0) throw new ApiError(400, `${label} is empty`);
   if (buffer.length > maxBytes) {
-    throw new ApiError(400, `${label} exceeds the ${Math.round(maxBytes / 1024 / 1024)} MB limit`);
+    throw new ApiError(413, `${label} exceeds the ${Math.round(maxBytes / 1024 / 1024)} MB limit`);
   }
   const entry = allowlist[mimeType];
-  if (!entry) throw new ApiError(400, `Unsupported ${label} type: ${mimeType || "unknown"}`);
+  if (!entry) throw new ApiError(415, `Unsupported ${label} type: ${mimeType || "unknown"}`);
   // Magic bytes must agree with the declared MIME type (anti-spoofing)
-  if (!entry.magic(buffer)) throw new ApiError(400, `File content does not match its declared type`);
+  if (!entry.magic(buffer)) throw new ApiError(415, `File content does not match its declared type`);
   // Extension is display-only, but flag a mismatch early
   const declaredExt = fileName.includes(".") ? fileName.split(".").pop()!.toLowerCase() : "";
   if (declaredExt && declaredExt !== entry.ext && !(entry.ext === "jpg" && declaredExt === "jpeg")) {
@@ -57,6 +57,15 @@ export function validateImageUpload(buffer: Buffer, mimeType: string, fileName: 
 export function validateResumeUpload(buffer: Buffer, mimeType: string, fileName: string): Sniff {
   return validate(buffer, mimeType, fileName, RESUME_TYPES, MAX_RESUME_BYTES, "resume");
 }
+
+import { randomUUID } from "node:crypto";
+
+/** Server-generated storage key — the client filename is never part of it. */
+export const buildResumeKey = (candidateId: string, ext: string): string =>
+  `resumes/${candidateId}/${randomUUID()}.${ext}`;
+
+export const buildMediaKey = (userId: string, ext: string): string =>
+  `media/${userId}/${randomUUID()}.${ext}`;
 
 /** Display-only filename sanitization (strip path segments + control chars). */
 export function sanitizeFileName(name: string): string {
