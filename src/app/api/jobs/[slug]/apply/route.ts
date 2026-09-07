@@ -6,7 +6,7 @@ import { requireCandidate } from "@/lib/auth-guards";
 import { ApiError, handleApiError } from "@/lib/errors";
 import { sendEmailSafe, appUrl } from "@/lib/email";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
-import { sanitizeRichText } from "@/lib/sanitize";
+import { stripHtml } from "@/lib/sanitize";
 
 const applySchema = z.object({
   resumeId: z.string().min(1),
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ slu
             jobId: job.id,
             candidateId: user.id,
             resumeId: resume.id,
-            coverLetter: body.coverLetter ? sanitizeRichText(body.coverLetter) : null,
+            coverLetter: body.coverLetter ? stripHtml(body.coverLetter) : null,
             status: "SUBMITTED",
             submittedAt: now,
             lastStatusAt: now,

@@ -1,7 +1,13 @@
 import { describe, it, expect } from "vitest";
 import { renderEmail, escapeHtml } from "@/lib/email/templates";
+import { stripHtml } from "@/lib/sanitize";
 
 describe("email templates", () => {
+  it("cover letters are stripped to plain text (Phase 12 security review)", () => {
+    // regression test for the apply route's stripHtml pipeline
+    expect(stripHtml("<p>Hi</p><script>alert(1)</script>I'm a great fit")).toBe("HiI'm a great fit");
+  });
+
   it("interpolates variables into subject and body", () => {
     const { subject, html } = renderEmail("application-status-changed", {
       name: "Mia Chen",
