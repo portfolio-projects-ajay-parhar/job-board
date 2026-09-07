@@ -47,11 +47,11 @@
 - [x] Unit tests: status machine (every legal/illegal pair), slug helper, sanitize-html pipeline
 
 ## Phase 5 — Candidate Profiles & Resume Uploads
-- [ ] Candidate profile API + editor (skills array, URL validation)
-- [ ] `POST /api/resumes` — PDF/DOCX MIME + extension + **magic-byte sniff** + 5 MB; server-generated key; `isPrimary` handling
-- [ ] Resume list/delete (409 when referenced by an application) + download route with owner authorization → signed URL
-- [ ] Resume manager UI
-- [ ] Unit tests: magic-byte/MIME/size validation, primary-resume logic
+- [x] Candidate profile API + editor (skills array, URL validation)
+- [x] `POST /api/resumes` — PDF/DOCX MIME + extension + **magic-byte sniff** + 5 MB (413) / unsupported (415); server-generated key; `isPrimary` handling (first upload primary; explicit makePrimary demotes others); 5-resume cap (409)
+- [x] Resume list/delete (409 `RESUME_IN_USE` when referenced by an application — verified live) + PATCH set-primary + download route with full authz matrix → signed URL (owner 302 ✓, applied-job employer 302 ✓, unrelated employer 404 ✓, other candidate 404 ✓, guest 401 ✓, admin 302 ✓)
+- [x] Resume manager UI (upload, list, primary, delete, open via signed URL)
+- [x] Unit tests: magic-byte validation, 5MB+1 boundary, 415 semantics, key generation (no client filename), filename sanitizationte/MIME/size validation, primary-resume logic
 
 ## Phase 6 — Full-Text Search, Filters & Pagination
 - [ ] Search query builder over `searchVector` (`websearch_to_tsquery`, `ts_rank` weighting, `ts_headline` snippets) + trigram fallback for partial words

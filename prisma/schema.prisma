@@ -224,6 +224,8 @@ model Job {
   /// Generated tsvector column added by raw SQL migration (full-text search).
   /// Not writable/readable via Prisma Client — queried through raw SQL in src/lib/search.ts.
   searchVector        Unsupported("tsvector")?
+  /// Generated monthly-normalized salary (cents) added by raw SQL migration — filter scale.
+  salaryMonthlyCents  Unsupported("integer")?
 
   company      Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
   applications Application[]
