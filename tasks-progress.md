@@ -101,11 +101,13 @@
 - [ ] RBAC: every `/api/admin/*` rejects non-admins (403)
 
 ## Phase 12 — Testing & Security
-- [ ] Vitest unit suite (status machines, file validation, search SQL composition + salary normalization, storage factory + signed-URL TTL, email templates, slug helper)
-- [ ] **Download authorization matrix test** (owner ✓ / applied-job employer ✓ / unrelated employer ✗ / guest ✗ / admin ✓)
-- [ ] Concurrent duplicate apply test (one 201, one 409) + deadline guard test (422)
-- [ ] Smoke script: register → upload resume → search → save → apply → employer status change → candidate timeline + email logged
-- [ ] RBAC smoke + security review (signed-URL expiry, no public object access, sanitization, rate limits, ownership checks)
+- [x] Vitest unit suites: application status machine (7×7), job status machine, magic-byte/MIME/size validation, search SQL composition + parameterization + salary normalization + pagination, storage factory + signed-URL expiry/tamper, email template rendering + escaping, slug collision helper — **81 tests green**
+- [x] **Download authorization matrix** verified live: owner 302 / applied-job employer 302 / unrelated employer 404 / other candidate 404 / guest 401 / admin 302; local signed-link expiry + tamper rejection unit-tested
+- [x] **Concurrent duplicate apply** — two parallel applies → exactly one 201 + one 409 (verified live, P2002 in-transaction)
+- [x] **Deadline guard** — past-deadline job → 422 `DEADLINE_PASSED`; tomorrow-deadline job → 201 (verified live)
+- [x] Withdraw-after-HIRED → 422 (verified live)
+- [x] `scripts/smoke.sh` + `scripts/smoke.mjs` — full 12-step end-to-end suite (register → upload → search → save → apply → employer pipeline → tracker timeline → RBAC matrix), green on fresh seed
+- [x] Security review written to `docs/SECURITY.md` — cover letters now stripped to plain text (regression test added); all 9 checklist items pass with notes; rate-limit scaling limitation documented
 
 ## Phase 13 — CI/CD, Deploy & Documentation
 - [ ] GitHub Actions CI (install → lint → type-check → test → build) + badge + branch protection

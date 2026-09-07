@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 560" font-family="Arial, sans-serif">
+  <rect width="980" height="560" fill="#f8fafc"/>
+  <text x="20" y="30" font-size="18" font-weight="bold" fill="#0f172a">JobBoard — Entity Relationships</text>
+
+  <g font-size="12" fill="#334155">
+    <!-- User -->
+    <rect x="380" y="50" width="200" height="150" rx="8" fill="#dbeafe" stroke="#3b82f6"/>
+    <text x="480" y="70" text-anchor="middle" font-weight="bold" fill="#0f172a">User</text>
+    <text x="392" y="92">id (cuid) · email (uq)</text>
+    <text x="392" y="110">passwordHash · role</text>
+    <text x="392" y="128">CANDIDATE|EMPLOYER|ADMIN</text>
+    <text x="392" y="150">1 —1 CandidateProfile</text>
+    <text x="392" y="168">1 —1 Company (owner)</text>
+    <text x="392" y="186">1 —* Resume / Application</text>
+
+    <!-- CandidateProfile -->
+    <rect x="80" y="60" width="180" height="110" rx="8" fill="#f1f5f9" stroke="#94a3b8"/>
+    <text x="170" y="80" text-anchor="middle" font-weight="bold" fill="#0f172a">CandidateProfile</text>
+    <text x="92" y="100">userId (uq) · fullName</text>
+    <text x="92" y="118">headline · skills String[]</text>
+    <text x="92" y="136">portfolio/github/linkedin</text>
+    <text x="92" y="154">yearsOfExperience</text>
+
+    <!-- Company -->
+    <rect x="700" y="50" width="180" height="130" rx="8" fill="#dcfce7" stroke="#22c55e"/>
+    <text x="790" y="70" text-anchor="middle" font-weight="bold" fill="#0f172a">Company</text>
+    <text x="712" y="90">ownerUserId (uq)</text>
+    <text x="712" y="108">slug (uq) · isVerified</text>
+    <text x="712" y="126">size · industry · logo</text>
+    <text x="712" y="144">1 —* Job</text>
+
+    <!-- Job -->
+    <rect x="700" y="230" width="220" height="190" rx="8" fill="#dcfce7" stroke="#22c55e"/>
+    <text x="810" y="250" text-anchor="middle" font-weight="bold" fill="#0f172a">Job</text>
+    <text x="712" y="270">slug (uq) · title · companyId</text>
+    <text x="712" y="288">type · locationType · category</text>
+    <text x="712" y="306">experienceLevel · location</text>
+    <text x="712" y="324">salaryMin/MaxCents · salaryPeriod</text>
+    <text x="712" y="342">status: DRAFT|PUBLISHED|CLOSED|ARCHIVED</text>
+    <text x="712" y="360">featured · applicationDeadline · viewCount</text>
+    <text x="712" y="378">searchVector (tsvector, GIN) [raw SQL]</text>
+    <text x="712" y="396">salaryMonthlyCents [raw SQL]</text>
+
+    <!-- Resume -->
+    <rect x="80" y="230" width="180" height="120" rx="8" fill="#fef9c3" stroke="#eab308"/>
+    <text x="170" y="250" text-anchor="middle" font-weight="bold" fill="#0f172a">Resume</text>
+    <text x="92" y="270">candidateId · storageKey (uq)</text>
+    <text x="92" y="288">provider S3|CLOUDINARY|LOCAL</text>
+    <text x="92" y="306">mimeType PDF|DOCX · isPrimary</text>
+    <text x="92" y="324">1 —* Application</text>
+
+    <!-- Application -->
+    <rect x="380" y="280" width="200" height="140" rx="8" fill="#fae8ff" stroke="#c026d3"/>
+    <text x="480" y="300" text-anchor="middle" font-weight="bold" fill="#0f172a">Application</text>
+    <text x="392" y="320">jobId + candidateId (uq)</text>
+    <text x="392" y="338">resumeId (FK, pinned)</text>
+    <text x="392" y="356">coverLetter · status</text>
+    <text x="392" y="374">SUBMITTED…HIRED/REJ/WD</text>
+    <text x="392" y="392">lastStatusAt · employerNote</text>
+
+    <!-- ApplicationEvent -->
+    <rect x="380" y="460" width="200" height="80" rx="8" fill="#fee2e2" stroke="#ef4444"/>
+    <text x="480" y="480" text-anchor="middle" font-weight="bold" fill="#0f172a">ApplicationEvent</text>
+    <text x="392" y="500">applicationId · actorId</text>
+    <text x="392" y="518">fromStatus → toStatus · note</text>
+
+    <!-- SavedJob / EmailLog -->
+    <rect x="80" y="460" width="180" height="80" rx="8" fill="#f1f5f9" stroke="#94a3b8"/>
+    <text x="170" y="480" text-anchor="middle" font-weight="bold" fill="#0f172a">SavedJob</text>
+    <text x="92" y="500">candidateId + jobId (uq)</text>
+    <text x="92" y="518">idempotent toggle</text>
+
+    <rect x="700" y="460" width="200" height="80" rx="8" fill="#f1f5f9" stroke="#94a3b8"/>
+    <text x="800" y="480" text-anchor="middle" font-weight="bold" fill="#0f172a">EmailLog</text>
+    <text x="712" y="500">to · template · subject</text>
+    <text x="712" y="518">SENT | FAILED | SKIPPED</text>
+
+    <!-- relations -->
+    <line x1="260" y1="115" x2="380" y2="115" stroke="#64748b" stroke-width="1.5"/>
+    <line x1="580" y1="100" x2="700" y2="100" stroke="#64748b" stroke-width="1.5"/>
+    <line x1="790" y1="180" x2="790" y2="230" stroke="#64748b" stroke-width="1.5"/>
+    <line x1="260" y1="290" x2="380" y2="320" stroke="#64748b" stroke-width="1.5"/>
+    <line x1="580" y1="330" x2="700" y2="320" stroke="#64748b" stroke-width="1.5"/>
+    <line x1="480" y1="280" x2="480" y2="460" stroke="#64748b" stroke-width="1.5"/>
+    <line x1="260" y1="500" x2="380" y2="360" stroke="#64748b" stroke-width="1.5" stroke-dasharray="5 3"/>
+    <line x1="580" y1="470" x2="700" y2="470" stroke="#64748b" stroke-width="1.5" stroke-dasharray="5 3"/>
+  </g>
+</svg>
