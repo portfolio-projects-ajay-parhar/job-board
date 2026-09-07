@@ -23,13 +23,13 @@
 - [x] `next.config.ts` image config + base layout + `src/lib/salary.ts` (+ 12 passing Vitest tests for salary helpers)
 
 ## Phase 2 — Auth & Roles
-- [ ] NextAuth options + handler (Credentials + Prisma adapter + JWT)
-- [ ] JWT/session callbacks (`id`/`role`) + type augmentation
-- [ ] Register API (role param; EMPLOYER signup creates `Company` in one transaction; 409; rate-limited)
-- [ ] Guards: `requireUser/requireRole/requireCandidate/requireEmployer/requireAdmin/requireCompanyOwner/requireApplicationParticipant`
-- [ ] Providers (Session, Query, Toast)
-- [ ] Sign-in / sign-up pages (role toggle with company-name field)
-- [ ] Role-aware header + server-side role checks in `(candidate)`, `(employer)`, `(admin)` layouts
+- [x] NextAuth options + handler (Credentials + Prisma adapter + JWT)
+- [x] JWT/session callbacks (`id`/`role`) + type augmentation
+- [x] Register API (role param; EMPLOYER signup creates `Company` in one transaction; 409; rate-limited) — verified live: 201/409/400-ADMIN-rejected/429
+- [x] Guards: `requireUser/requireRole/requireCandidate/requireEmployer/requireAdmin/requireCompanyOwner/requireApplicationParticipant` (throw typed `ApiError`/`AuthError`, mapped by `handleApiError`)
+- [x] Providers (Session, Query, Toast)
+- [x] Sign-in / sign-up pages (role toggle with company-name field)
+- [x] Role-aware header + server-side role checks in `(candidate)`, `(employer)`, `(admin)` layouts (verified 307 → `/signin?callbackUrl=…`)
 
 ## Phase 3 — Storage Layer & Company Profiles
 - [ ] Pluggable storage: `upload / getDownloadUrl(key, ttl) / delete` behind `getStorage()` — s3 (private + presigned), cloudinary (raw, signed), local (dev/test)

@@ -1,9 +1,19 @@
-// Placeholder — company profile editor arrives in Phase 3.
+import type { Metadata } from "next";
+import { CompanyEditor } from "./company-editor";
+
+export const metadata: Metadata = { title: "Company profile" };
+
 export default function CompanyPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-slate-900">Company profile</h1>
-      <p className="mt-2 text-sm text-slate-500">Profile editor arriving in Phase 3.</p>
+      <p className="mt-1 text-sm text-slate-500">
+        This information appears on your job posts and public company page.
+      </p>
+      <div className="mt-6">
+        <CompanyEditor />
+      </div>
     </div>
   );
 }
+
