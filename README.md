@@ -2,9 +2,10 @@
 
 A production-shaped **job board** connecting employers, candidates, and admins — built with Next.js 16 (App Router), PostgreSQL, Prisma, and NextAuth. The signature engineering concerns: **PostgreSQL full-text search** over a weighted `tsvector`, **confidential resume storage** with short-lived signed downloads behind a tested authorization matrix, **pluggable document storage** (S3 / Cloudinary / local), an **audited hiring-pipeline state machine**, and **offset pagination with totals**.
 
-> Live demo / screenshots: _pending external deployment setup (see [Deployment](#deployment))_
+> **Status: complete** — all 13 phases implemented; `next build`, `tsc --noEmit`, ESLint, and 81 unit tests green; 12-step end-to-end smoke suite passing on a freshly seeded database. What remains is external deployment setup (GitHub remote, Vercel, S3/Cloudinary/Resend keys) — see [Deployment](#deployment).
 
 [![CI](https://github.com/YOUR_GH_USERNAME/job-board/actions/workflows/ci.yml/badge.svg)](./.github/workflows/ci.yml)
+<!-- ↑ after pushing to GitHub, replace YOUR_GH_USERNAME with your account -->
 
 ## Table of Contents
 
@@ -48,7 +49,7 @@ Generic job boards treat search as `ILIKE '%term%'` and treat resumes as files o
 Next.js 16 (App Router) · TypeScript · Tailwind CSS v4
 PostgreSQL 16 (Docker dev / Supabase prod) · Prisma 6 (+ raw SQL for FTS)
 NextAuth v4 (Credentials + JWT, 3-role RBAC)
-TanStack Query v5 · Axios · Zod · React Hook Form
+TanStack Query v5 · Axios · Zod (server + client validation)
 sanitize-html · slugify · bcryptjs · date-fns · lucide-react
 @aws-sdk/client-s3 + s3-request-presigner · cloudinary · Resend
 Vitest (81 unit tests) · GitHub Actions · Docker
@@ -69,6 +70,27 @@ Browser ──▶ Next.js App Router (RSC for public pages, client components fo
 ```
 
 Request flows (search → apply → pipeline → email) are documented in [`docs/PLAN.md`](docs/PLAN.md).
+
+### Project structure
+
+```text
+src/
+├── app/
+│   ├── (public)/          # home, /jobs (+ detail, JSON-LD), /companies — SEO-aware RSC
+│   ├── (auth)/            # /signin, /signup (role toggle)
+│   ├── (candidate)/account/   # profile + resumes, applications tracker, saved
+│   ├── (employer)/employer/   # dashboard, company, jobs, hiring pipeline
+│   ├── (admin)/admin/         # stats, moderation, users
+│   └── api/               # route handlers — every mutation guard-checked
+├── components/            # providers (Session/Query/Toast), header, JobCard
+├── lib/                   # auth, auth-guards, search, storage/, email, state machines
+└── types/                 # NextAuth role augmentation
+prisma/                    # schema + 3 migrations (2 raw-SQL: FTS, salary normalization)
+scripts/                   # smoke.mjs (e2e), verify-phase7.mjs
+docs/                      # PLAN.md, TASKS.md, SECURITY.md, diagrams
+```
+
+Planning and phase-by-phase build notes live in [`docs/PLAN.md`](docs/PLAN.md), [`docs/TASKS.md`](docs/TASKS.md), and [`tasks-progress.md`](tasks-progress.md).
 
 ## Data Model
 
@@ -169,7 +191,8 @@ docker run -d --name jobboard-db -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=jo
 
 # 2. Install + migrate + seed
 npm install
-cp .env.example .env.local        # local defaults work for dev
+cp .env.example .env          # Prisma CLI reads .env; Next.js layers .env.local on top if present
+npx prisma generate
 npx prisma migrate deploy
 npm run db:seed
 
