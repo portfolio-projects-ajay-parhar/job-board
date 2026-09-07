@@ -79,13 +79,11 @@
 - [x] Unit tests: template rendering, interpolation, script/img injection escaping
 
 ## Phase 9 — Storefront Pages
-- [ ] Public layout + navbar + footer
-- [ ] Home (hero search, featured rail, category tiles with counts, recent jobs, verified companies)
-- [ ] `/jobs` — search, filter sidebar, sort, **pagination with totals**, empty/loading states
-- [ ] `/jobs/[slug]` — sanitized sections, salary, company card, apply CTA states, save button, related jobs, `generateMetadata` + **JSON-LD `JobPosting`**, view count
-- [ ] `/companies` + `/companies/[slug]`
-- [ ] SEO: sitemap, robots, OG metadata
-- [ ] `loading.tsx` skeletons on every public segment
+- [x] Public pages in `(public)` group: home (hero search, featured rail, category tiles with counts, recent jobs, verified companies), `/jobs` (filters/sort/pagination/empty state), `/companies` + `/companies/[slug]`
+- [x] `/jobs/[slug]` — sanitized sections (write + render), salary, deadline warnings, related jobs, view count, `generateMetadata`
+- [x] **JSON-LD `JobPosting`** (verified present in page source; `<` escaped to `\u003c`); employmentType, baseSalary (min/max/unit), TELECOMMUTE for remote, validThrough = deadline
+- [x] Apply card states: guest → "Sign in to apply", candidate → resume picker + cover letter → apply, applied → "Applied ✓ (status)", closed/deadline-passed → disabled with reason, employer/admin → hidden; save toggle wired to Phase 8 APIs
+- [x] `sitemap.ts` (published jobs + companies, no authed routes) + `robots.ts` (verified live) + `loading.tsx` skeletons
 
 ## Phase 10 — Candidate & Employer Dashboards
 - [ ] `/account/profile` (profile form + resume manager) · `/account/applications` (status timeline from ApplicationEvents) · `/account/saved`
