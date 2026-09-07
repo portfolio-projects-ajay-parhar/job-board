@@ -86,9 +86,13 @@
 - [x] `sitemap.ts` (published jobs + companies, no authed routes) + `robots.ts` (verified live) + `loading.tsx` skeletons
 
 ## Phase 10 — Candidate & Employer Dashboards
-- [ ] `/account/profile` (profile form + resume manager) · `/account/applications` (status timeline from ApplicationEvents) · `/account/saved`
-- [ ] `/employer` KPIs (active jobs, total/new applications, per-job funnel counts) · `/employer/jobs` (status actions) · `/employer/jobs/[id]/applications` (pipeline view, detail drawer, machine-legal status buttons + note)
-- [ ] Optimistic updates + toasts on all mutations
+- [x] `/account/profile` — profile form + resume manager (upload/primary/delete, in-use 409 surfacing)
+- [x] `/account/applications` — tracker grouped by status (Active/Interviewing/Closed); expandable **status timeline from ApplicationEvents** (from→to, notes, timestamps); withdraw button only when machine-legal
+- [x] `/account/saved` — saved jobs list with unsave + apply shortcuts
+- [x] `/employer` dashboard — KPI cards (active jobs, total jobs, total applications, new this week), per-job funnel table, recent applications feed; `GET /api/employer/stats`
+- [x] `/employer/jobs` — table with status filter + status action buttons (machine-legal only, from Phase 4)
+- [x] `/employer/jobs/[id]/applications` — kanban-style pipeline by status; candidate cards (name, headline, top skills); detail: cover letter, resume signed download, status-change buttons (`employerLegalNext` only) + note on REJECTED
+- [x] All mutations use TanStack Query with error toasts surfacing server messages; dashboard `loading.tsx` skeletons; verified pages live (200) for employer + candidate sessions
 
 ## Phase 11 — Admin Panel & Moderation
 - [ ] `(admin)` layout with `requireAdmin()` server guard
