@@ -32,11 +32,11 @@
 - [x] Role-aware header + server-side role checks in `(candidate)`, `(employer)`, `(admin)` layouts (verified 307 → `/signin?callbackUrl=…`)
 
 ## Phase 3 — Storage Layer & Company Profiles
-- [ ] Pluggable storage: `upload / getDownloadUrl(key, ttl) / delete` behind `getStorage()` — s3 (private + presigned), cloudinary (raw, signed), local (dev/test)
-- [ ] `POST /api/media` — logos only (MIME + magic bytes, 2 MB)
-- [ ] Company profile APIs (`/api/employer/company`, public `/api/companies` + `[slug]`)
-- [ ] Company profile editor page with logo upload
-- [ ] Unit tests: storage factory by env, non-image rejection
+- [x] Pluggable storage: `upload / getDownloadUrl(key, ttl) / delete` behind `getStorage()` — s3 (private + presigned), cloudinary (raw, signed), local (dev/test, HMAC-signed internal links)
+- [x] `POST /api/media` — logos only (MIME + magic bytes, 2 MB) — verified 401 for guests
+- [x] Company profile APIs (`/api/employer/company`, public `/api/companies` + `[slug]`)
+- [x] Company profile editor page with logo upload
+- [x] Unit tests: storage factory by env, local round-trip + signed-link tamper/expiry, non-image/magic-byte/oversize rejection, filename sanitization
 
 ## Phase 4 — Job CRUD & Publishing
 - [ ] `POST /api/employer/jobs` (zod, unique slug, sanitized rich text, salary in cents, DRAFT/PUBLISHED)

@@ -1,4 +1,4 @@
-import { ApiError } from "./errors";
+import { ApiError } from "./api-error";
 
 /**
  * Upload validation — MIME allowlist + magic-byte sniffing + hard size limits.
