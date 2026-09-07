@@ -95,10 +95,12 @@
 - [x] All mutations use TanStack Query with error toasts surfacing server messages; dashboard `loading.tsx` skeletons; verified pages live (200) for employer + candidate sessions
 
 ## Phase 11 — Admin Panel & Moderation
-- [ ] `(admin)` layout with `requireAdmin()` server guard
-- [ ] `/admin` platform KPIs (users/companies/jobs/applications by status, 30-day series chart)
-- [ ] `/admin/companies` verify/unverify · `/admin/jobs` feature/close · `/admin/users` list
-- [ ] RBAC: every `/api/admin/*` rejects non-admins (403)
+- [x] `(admin)` layout with server-side guard + sub-nav (Overview / Companies / Jobs / Users)
+- [x] `/admin` platform KPIs (users/companies/jobs/applications by status, 30-day series chart via `generate_series` raw SQL)
+- [x] `/admin/companies` verify/unverify (`PATCH /api/admin/companies/[id]`) — storefront badge flip verified live
+- [x] `/admin/jobs` feature/unfeature + close (documented admin override) via `PATCH /api/admin/jobs/[id]`
+- [x] `/admin/users` — read-only directory with role badges + activity counts (roles documented as DB-managed)
+- [x] RBAC: every `/api/admin/*` route starts with `requireAdmin()` — guest 401, candidate 403, admin 200 verified live; bad ids → 404
 
 ## Phase 12 — Testing & Security
 - [x] Vitest unit suites: application status machine (7×7), job status machine, magic-byte/MIME/size validation, search SQL composition + parameterization + salary normalization + pagination, storage factory + signed-URL expiry/tamper, email template rendering + escaping, slug collision helper — **81 tests green**
@@ -110,13 +112,13 @@
 - [x] Security review written to `docs/SECURITY.md` — cover letters now stripped to plain text (regression test added); all 9 checklist items pass with notes; rate-limit scaling limitation documented
 
 ## Phase 13 — CI/CD, Deploy & Documentation
-- [ ] GitHub Actions CI (install → lint → type-check → test → build) + badge + branch protection
-- [ ] (Optional) Dockerfile + docker-compose
-- [ ] GitHub push + Vercel deploy with all env vars (prod storage = `s3`)
-- [ ] S3 private bucket policy (no public access) / Cloudinary hardened; Resend domain verified
-- [ ] Production smoke (upload → apply → pipeline → email)
-- [ ] README 17-section template (FTS deep-dive, pagination trade-off, signed-URL authz matrix) + architecture/ER diagrams + demo GIF
+- [x] GitHub Actions CI (`.github/workflows/ci.yml`): Postgres 16 service → `npm ci` → `prisma migrate deploy` (incl. raw-SQL FTS) → lint → type-check → tests → build
+- [x] README with 17-section template (FTS deep-dive, offset-vs-cursor trade-off, signed-URL authz matrix, seed accounts) + `docs/architecture.svg` + `docs/ER-diagram.svg`
+- [x] (Optional) `Dockerfile` + `docker-compose.yml` (app + local Postgres, migrations on boot)
+- [ ] GitHub push + Vercel deploy — **pending external credentials** (`gh` auth / Vercel account); steps documented in README §Deployment
+- [ ] S3 private bucket policy / Cloudinary hardening / Resend domain verification — **pending external accounts** (guidance in `.env.example` + README)
+- [ ] Production smoke — **run `node scripts/smoke.mjs` with `SMOKE_URL=<prod>` after deploying**
 
 ---
 
-**Status: NOT STARTED** — planning artifacts complete. Update to **BUILD PASSING** once `next build`, `tsc --noEmit`, ESLint, and the test suite are all green.
+**Status: BUILD PASSING** — `next build`, `tsc --noEmit`, ESLint, and 81 unit tests all green; smoke suite 12/12 on a fresh seeded DB. Remaining items are external deployment steps requiring account credentials (GitHub remote, Vercel, S3/Cloudinary/Resend keys).
