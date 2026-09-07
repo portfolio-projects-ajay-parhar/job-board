@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { requireCandidate } from "@/lib/auth-guards";
 import { ApiError, handleApiError } from "@/lib/errors";
+import { sendEmailSafe, appUrl } from "@/lib/email";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { sanitizeRichText } from "@/lib/sanitize";
 
@@ -70,7 +71,38 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ slu
         return application;
       });
 
-      // Phase 8: send application emails here (after commit, never blocking the response)
+      // Phase 8: post-commit emails — employer + candidate confirmations (never blocking)
+      const jobDetail = await prisma.job.findUnique({
+        where: { id: job.id },
+        select: {
+          title: true,
+          slug: true,
+          company: { select: { name: true, owner: { select: { email: true } } } },
+        },
+      });
+      if (jobDetail) {
+        sendEmailSafe({
+          to: jobDetail.company.owner.email,
+          template: "application-received",
+          data: {
+            candidateName: user.name ?? "A candidate",
+            jobTitle: jobDetail.title,
+            companyName: jobDetail.company.name,
+            url: appUrl(`/employer/jobs/${job.id}/applications`),
+          },
+        });
+      }
+      sendEmailSafe({
+        to: user.email ?? "",
+        template: "application-confirmation",
+        data: {
+          name: user.name ?? "there",
+          jobTitle: job.title,
+          companyName: "",
+          url: appUrl("/account/applications"),
+        },
+      });
+
       return NextResponse.json(application, { status: 201 });
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002") {

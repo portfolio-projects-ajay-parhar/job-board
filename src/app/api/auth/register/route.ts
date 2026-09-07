@@ -5,6 +5,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { ApiError, handleApiError } from "@/lib/errors";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { sendEmailSafe, appUrl } from "@/lib/email";
 
 const schema = z
   .object({
@@ -50,6 +51,16 @@ export async function POST(req: NextRequest) {
         });
         return user;
       });
+      // post-commit: welcome email (never blocks the response)
+      sendEmailSafe({
+        to: email,
+        template: "welcome-employer",
+        data: {
+          name: body.name,
+          companyName: body.companyName,
+          url: appUrl("/employer/company"),
+        },
+      });
       return NextResponse.json({ id: user.id, role: user.role }, { status: 201 });
     }
 
@@ -61,6 +72,11 @@ export async function POST(req: NextRequest) {
         data: { userId: user.id, fullName: body.name },
       });
       return user;
+    });
+    sendEmailSafe({
+      to: email,
+      template: "welcome-candidate",
+      data: { name: body.name, url: appUrl("/account/profile") },
     });
     return NextResponse.json({ id: user.id, role: user.role }, { status: 201 });
   } catch (e) {

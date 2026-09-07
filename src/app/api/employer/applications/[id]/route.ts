@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { requireEmployer } from "@/lib/auth-guards";
 import { ApiError, handleApiError } from "@/lib/errors";
 import { assertApplicationTransition } from "@/lib/application-status";
+import { sendEmailSafe, appUrl } from "@/lib/email";
 
 const bodySchema = z.object({
   status: z.enum(["IN_REVIEW", "INTERVIEW", "OFFER", "HIRED", "REJECTED"]),
@@ -50,7 +51,25 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       return updated;
     });
 
-    // Phase 8: email the candidate here (after commit, never blocking)
+    // Phase 8: post-commit email to the candidate (never blocking)
+    const recipient = await prisma.user.findUnique({
+      where: { id: updated.candidateId },
+      select: { email: true, name: true },
+    });
+    if (recipient) {
+      sendEmailSafe({
+        to: recipient.email,
+        template: "application-status-changed",
+        data: {
+          name: recipient.name ?? "there",
+          jobTitle: application.job.title,
+          jobSlug: application.job.slug,
+          status,
+          url: appUrl("/account/applications"),
+        },
+      });
+    }
+
     return NextResponse.json(updated);
   } catch (e) {
     return handleApiError(e);
