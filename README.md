@@ -71,6 +71,8 @@ Browser ──▶ Next.js App Router (RSC for public pages, client components fo
 
 Request flows (search → apply → pipeline → email) are documented in [`docs/PLAN.md`](docs/PLAN.md).
 
+![Architecture diagram](docs/architecture.svg)
+
 ### Project structure
 
 ```text
@@ -102,6 +104,8 @@ Key columns added by **raw SQL migrations** (Prisma cannot express them):
 - `Job.salaryMonthlyCents` — generated monthly-normalized salary + btree index (filter scale)
 
 Full field list and all 14 indexes: [`docs/PLAN.md` §Database Schema](docs/PLAN.md).
+
+![ER diagram](docs/ER-diagram.svg)
 
 ## API Surface
 
