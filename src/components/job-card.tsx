@@ -28,36 +28,38 @@ const postedAgo = (date?: Date | string | null): string => {
   return `${Math.floor(days / 30)}mo ago`;
 };
 
-const chip = "rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600";
+const chip = "rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300";
 
 export function JobCard({ job }: { job: JobCardData }) {
+  const posted = postedAgo(job.publishedAt);
+
   return (
     <Link
       href={`/jobs/${job.slug}`}
-      className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white p-5 transition hover:border-slate-400"
+      className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-5 transition hover:border-slate-400 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-600 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
     >
       <div className="min-w-0">
-        <p className="font-semibold text-slate-900">
+        <p className="font-semibold text-slate-900 dark:text-slate-100">
           {job.title}
           {job.featured && (
-            <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">
+            <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-400/10 dark:text-amber-400">
               Featured
             </span>
           )}
         </p>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
           {job.companyName}
-          {job.isVerified && <span className="ml-1 text-emerald-600" title="Verified company">✓</span>}
+          {job.isVerified && <span className="ml-1 text-emerald-600 dark:text-emerald-400" title="Verified company">✓</span>}
           {job.location ? ` · ${job.location}` : ""}
           {" · "}
           {[job.locationType, job.type, job.experienceLevel].filter(Boolean).join(" · ")}
         </p>
         <div className="mt-2 flex flex-wrap gap-1.5">
           {job.locationType === "REMOTE" && <span className={chip}>Remote</span>}
-          <span className={chip}>{postedAgo(job.publishedAt) ? `Posted ${postedAgo(job.publishedAt)}` : ""}</span>
+          {posted && <span className={chip}>{`Posted ${posted}`}</span>}
         </div>
       </div>
-      <span className="text-sm font-medium text-slate-700">
+      <span className="shrink-0 text-sm font-medium text-slate-700 sm:text-right dark:text-slate-300">
         {formatSalary(job.salaryMinCents, job.salaryMaxCents, job.salaryPeriod as never)}
       </span>
     </Link>

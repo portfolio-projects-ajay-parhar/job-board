@@ -34,18 +34,18 @@ export default async function HomePage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
       {/* Hero */}
-      <section className="rounded-2xl bg-slate-900 px-6 py-14 text-center text-white">
-        <h1 className="text-4xl font-bold tracking-tight">Find your next role</h1>
+      <section className="rounded-2xl bg-slate-900 px-6 py-10 text-center text-white sm:py-14">
+        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Find your next role</h1>
         <p className="mx-auto mt-3 max-w-xl text-slate-300">
           Full-text search across {categoryCount.size > 0 ? "thousands of" : ""} jobs from verified companies.
         </p>
-        <form action="/jobs" className="mx-auto mt-8 flex max-w-xl gap-2">
+        <form action="/jobs" className="mx-auto mt-8 flex max-w-xl flex-col gap-2 sm:flex-row">
           <input
             name="q"
             placeholder='Try "senior react" or "node remote"'
             className="w-full rounded-md border-0 px-4 py-3 text-sm text-slate-900 focus:outline-none"
           />
-          <button className="rounded-md bg-emerald-500 px-6 py-3 text-sm font-medium text-white hover:bg-emerald-400">
+          <button className="shrink-0 rounded-md bg-emerald-500 px-6 py-3 text-sm font-medium text-white hover:bg-emerald-400">
             Search
           </button>
         </form>
@@ -65,7 +65,7 @@ export default async function HomePage() {
       {/* Featured rail */}
       {featured.length > 0 && (
         <section className="mt-12">
-          <h2 className="text-xl font-bold text-slate-900">Featured jobs</h2>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Featured jobs</h2>
           <div className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-2">
             {featured.map((job) => (
               <JobCard
@@ -94,8 +94,8 @@ export default async function HomePage() {
       {/* Recent jobs */}
       <section className="mt-12">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-slate-900">Recent jobs</h2>
-          <Link href="/jobs" className="text-sm font-medium text-blue-600 hover:underline">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Recent jobs</h2>
+          <Link href="/jobs" className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400">
             Browse all →
           </Link>
         </div>
@@ -125,8 +125,8 @@ export default async function HomePage() {
       {/* Top verified companies */}
       <section className="mt-12">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-slate-900">Verified companies</h2>
-          <Link href="/companies" className="text-sm font-medium text-blue-600 hover:underline">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Verified companies</h2>
+          <Link href="/companies" className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400">
             All companies →
           </Link>
         </div>
@@ -135,14 +135,14 @@ export default async function HomePage() {
             <Link
               key={c.id}
               href={`/companies/${c.slug}`}
-              className="rounded-xl border border-slate-200 bg-white p-5 transition hover:border-slate-400"
+              className="rounded-xl border border-slate-200 bg-white p-5 transition hover:border-slate-400 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-600"
             >
               <div className="flex items-center justify-between">
-                <span className="font-semibold text-slate-900">{c.name}</span>
-                <span className="text-emerald-600" title="Verified">✓</span>
+                <span className="font-semibold text-slate-900 dark:text-slate-100">{c.name}</span>
+                <span className="text-emerald-600 dark:text-emerald-400" title="Verified">✓</span>
               </div>
-              <p className="mt-1 text-sm text-slate-500">{c.industry ?? c.location ?? "—"}</p>
-              <p className="mt-2 text-sm font-medium text-slate-700">
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{c.industry ?? c.location ?? "—"}</p>
+              <p className="mt-2 text-sm font-medium text-slate-700 dark:text-slate-300">
                 {c._count.jobs} open role{c._count.jobs === 1 ? "" : "s"}
               </p>
             </Link>

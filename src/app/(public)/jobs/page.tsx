@@ -35,11 +35,11 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
-      <h1 className="text-3xl font-bold text-slate-900">Search jobs</h1>
+      <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Search jobs</h1>
 
       <JobSearchControls />
 
-      <p className="mt-4 text-sm text-slate-500">
+      <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
         Page {result.page} of {result.totalPages} · {result.total} result{result.total === 1 ? "" : "s"}
       </p>
 
@@ -48,37 +48,37 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
           <Link
             key={job.id}
             href={`/jobs/${job.slug}`}
-            className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white p-5 transition hover:border-slate-400"
+            className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white p-5 transition hover:border-slate-400 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-600 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
           >
-            <div>
-              <p className="font-semibold text-slate-900">
+            <div className="min-w-0">
+              <p className="font-semibold text-slate-900 dark:text-slate-100">
                 {job.title}
                 {job.featured && (
-                  <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">
+                  <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-400/10 dark:text-amber-400">
                     Featured
                   </span>
                 )}
               </p>
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                 {job.companyName}
-                {job.isVerified && <span className="ml-1 text-emerald-600">✓</span>}
+                {job.isVerified && <span className="ml-1 text-emerald-600 dark:text-emerald-400">✓</span>}
                 {" · "}
                 {[job.location, job.locationType, job.type, job.experienceLevel]
                   .filter(Boolean)
                   .join(" · ")}
               </p>
             </div>
-            <span className="text-sm font-medium text-slate-700">
+            <span className="shrink-0 text-sm font-medium text-slate-700 sm:text-right dark:text-slate-300">
               {formatSalary(job.salaryMinCents, job.salaryMaxCents, job.salaryPeriod as never)}
             </span>
           </Link>
         ))}
 
         {result.jobs.length === 0 && (
-          <div className="rounded-xl border border-dashed border-slate-300 bg-white p-12 text-center">
-            <p className="text-slate-600">No jobs match your search.</p>
+          <div className="rounded-xl border border-dashed border-slate-300 bg-white p-12 text-center dark:border-slate-700 dark:bg-slate-900">
+            <p className="text-slate-600 dark:text-slate-300">No jobs match your search.</p>
             {hasFilters && (
-              <Link href="/jobs" className="mt-3 inline-block text-sm font-medium text-blue-600 hover:underline">
+              <Link href="/jobs" className="mt-3 inline-block text-sm font-medium text-blue-600 hover:underline dark:text-blue-400">
                 Clear all filters
               </Link>
             )}
@@ -101,8 +101,8 @@ export default async function JobsPage({ searchParams }: { searchParams: Promise
                 href={`/jobs?${params.toString()}`}
                 className={`rounded-md px-3 py-1.5 ${
                   i + 1 === result.page
-                    ? "bg-slate-900 text-white"
-                    : "border border-slate-300 bg-white hover:bg-slate-100"
+                    ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
+                    : "border border-slate-300 bg-white hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800"
                 }`}
               >
                 {i + 1}

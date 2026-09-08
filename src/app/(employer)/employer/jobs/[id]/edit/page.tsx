@@ -7,7 +7,7 @@ export default async function EditJobPage({ params }: { params: Promise<{ id: st
   const { id } = await params;
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900">Edit job</h1>
+      <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Edit job</h1>
       <div className="mt-6">
         <JobForm jobId={id} />
       </div>

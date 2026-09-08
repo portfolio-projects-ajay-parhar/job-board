@@ -76,8 +76,8 @@ export function ResumeManager() {
   const resumes = data?.items ?? [];
 
   return (
-    <div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-6">
-      <h2 className="font-semibold text-slate-900">Resumes</h2>
+    <div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+      <h2 className="font-semibold text-slate-900 dark:text-slate-100">Resumes</h2>
 
       <div className="flex flex-col gap-2 text-sm">
         <input
@@ -85,9 +85,9 @@ export function ResumeManager() {
           type="file"
           accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           onChange={(e) => e.target.files?.[0] && upload.mutate(e.target.files[0])}
-          className="text-slate-600 file:mr-3 file:rounded-md file:border-0 file:bg-slate-900 file:px-3 file:py-1.5 file:text-white"
+          className="text-slate-600 file:mr-3 file:rounded-md file:border-0 file:bg-slate-900 file:px-3 file:py-1.5 file:text-white dark:text-slate-400 dark:file:bg-slate-100 dark:file:text-slate-900"
         />
-        <label className="flex items-center gap-2 text-xs text-slate-600">
+        <label className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
           <input
             type="checkbox"
             onChange={(e) => {
@@ -98,17 +98,17 @@ export function ResumeManager() {
         </label>
       </div>
 
-      {isLoading && <p className="text-sm text-slate-500">Loading…</p>}
+      {isLoading && <p className="text-sm text-slate-500 dark:text-slate-400">Loading…</p>}
 
       <ul className="flex flex-col gap-2">
         {resumes.map((r) => (
-          <li key={r.id} className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm">
+          <li key={r.id} className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm dark:border-slate-800">
             <div className="min-w-0">
-              <p className="truncate font-medium text-slate-800">
-                {r.isPrimary && <span className="mr-1 text-amber-500">★</span>}
+              <p className="truncate font-medium text-slate-800 dark:text-slate-200">
+                {r.isPrimary && <span className="mr-1 text-amber-500 dark:text-amber-400">★</span>}
                 {r.fileName}
               </p>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 {fmtSize(r.sizeBytes)} ·{" "}
                 {r.appliedCount > 0 ? `used by ${r.appliedCount} application${r.appliedCount === 1 ? "" : "s"}` : "unused"}
               </p>
@@ -118,14 +118,14 @@ export function ResumeManager() {
                 <button
                   onClick={() => setPrimary.mutate(r.id)}
                   disabled={setPrimary.isPending}
-                  className="rounded-md border border-slate-300 px-2 py-1 text-xs hover:bg-slate-100"
+                  className="rounded-md border border-slate-300 px-2 py-1 text-xs hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
                 >
                   Primary
                 </button>
               )}
               <a
                 href={`/api/resumes/${r.id}/download`}
-                className="rounded-md border border-slate-300 px-2 py-1 text-xs hover:bg-slate-100"
+                className="rounded-md border border-slate-300 px-2 py-1 text-xs hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
               >
                 Open
               </a>
@@ -134,7 +134,7 @@ export function ResumeManager() {
                   if (confirm(`Delete "${r.fileName}"?`)) remove.mutate(r.id);
                 }}
                 disabled={remove.isPending}
-                className="rounded-md border border-red-200 px-2 py-1 text-xs text-red-600 hover:bg-red-50"
+                className="rounded-md border border-red-200 px-2 py-1 text-xs text-red-600 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950/50"
               >
                 Delete
               </button>
@@ -142,7 +142,7 @@ export function ResumeManager() {
           </li>
         ))}
         {!isLoading && resumes.length === 0 && (
-          <li className="py-4 text-center text-sm text-slate-500">No resumes yet — upload your first.</li>
+          <li className="py-4 text-center text-sm text-slate-500 dark:text-slate-400">No resumes yet — upload your first.</li>
         )}
       </ul>
     </div>

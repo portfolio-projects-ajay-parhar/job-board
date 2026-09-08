@@ -1,18 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useDebouncedCallback } from "./use-debounced-callback";
 
 const selectClass =
-  "rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-slate-900 focus:outline-none";
+  "rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus:border-slate-900 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-slate-400";
 
 export function JobSearchControls() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [q, setQ] = useState(searchParams.get("q") ?? "");
+  const urlQ = searchParams.get("q") ?? "";
+  const [q, setQ] = useState(urlQ);
+  const [prevUrlQ, setPrevUrlQ] = useState(urlQ);
+
+  // keep the input in sync when the URL changes externally (back/forward)
+  if (urlQ !== prevUrlQ) {
+    setPrevUrlQ(urlQ);
+    setQ(urlQ);
+  }
+
   const debouncedSetQ = useDebouncedCallback((value: string) => {
     update({ q: value });
   }, 300);
@@ -27,54 +36,49 @@ export function JobSearchControls() {
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   }
 
-  // keep the input in sync when the URL changes externally (back/forward)
-  useEffect(() => {
-    setQ(searchParams.get("q") ?? "");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams.get("q")]);
-
   const sel = (key: string) => ({
     value: searchParams.get(key) ?? "",
     onChange: (e: React.ChangeEvent<HTMLSelectElement>) => update({ [key]: e.target.value || null }),
   });
 
   return (
-    <div className="mt-6 flex flex-wrap items-center gap-3">
+    <div className="mt-6 flex flex-col gap-3">
       <input
-        defaultValue={q}
+        value={q}
         onChange={(e) => {
           setQ(e.target.value);
           debouncedSetQ(e.target.value);
         }}
         placeholder="Search title, skills, description…"
-        className="min-w-64 flex-1 rounded-md border border-slate-300 px-4 py-2 text-sm focus:border-slate-900 focus:outline-none"
+        className="w-full rounded-md border border-slate-300 px-4 py-2.5 text-sm focus:border-slate-900 focus:outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-slate-400"
       />
 
-      <select {...sel("locationType")} className={selectClass} aria-label="Location type">
-        <option value="">Any location</option>
-        <option value="REMOTE">Remote</option>
-        <option value="HYBRID">Hybrid</option>
-        <option value="ONSITE">On-site</option>
-      </select>
+      <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap sm:items-center">
+        <select {...sel("locationType")} className={`${selectClass} w-full sm:w-auto`} aria-label="Location type">
+          <option value="">Any location</option>
+          <option value="REMOTE">Remote</option>
+          <option value="HYBRID">Hybrid</option>
+          <option value="ONSITE">On-site</option>
+        </select>
 
-      <select {...sel("type")} className={selectClass} aria-label="Job type">
-        <option value="">Any type</option>
-        <option value="FULL_TIME">Full-time</option>
-        <option value="PART_TIME">Part-time</option>
-        <option value="CONTRACT">Contract</option>
-        <option value="INTERNSHIP">Internship</option>
-        <option value="TEMPORARY">Temporary</option>
-      </select>
+        <select {...sel("type")} className={`${selectClass} w-full sm:w-auto`} aria-label="Job type">
+          <option value="">Any type</option>
+          <option value="FULL_TIME">Full-time</option>
+          <option value="PART_TIME">Part-time</option>
+          <option value="CONTRACT">Contract</option>
+          <option value="INTERNSHIP">Internship</option>
+          <option value="TEMPORARY">Temporary</option>
+        </select>
 
-      <select {...sel("experienceLevel")} className={selectClass} aria-label="Experience level">
-        <option value="">Any level</option>
-        <option value="ENTRY">Entry</option>
-        <option value="MID">Mid</option>
-        <option value="SENIOR">Senior</option>
-        <option value="LEAD">Lead</option>
-      </select>
+        <select {...sel("experienceLevel")} className={`${selectClass} w-full sm:w-auto`} aria-label="Experience level">
+          <option value="">Any level</option>
+          <option value="ENTRY">Entry</option>
+          <option value="MID">Mid</option>
+          <option value="SENIOR">Senior</option>
+          <option value="LEAD">Lead</option>
+        </select>
 
-      <select {...sel("category")} className={selectClass} aria-label="Category">
+        <select {...sel("category")} className={`${selectClass} w-full sm:w-auto`} aria-label="Category">
         <option value="">Any category</option>
         <option value="ENGINEERING">Engineering</option>
         <option value="DESIGN">Design</option>
@@ -88,20 +92,20 @@ export function JobSearchControls() {
         <option value="OTHER">Other</option>
       </select>
 
-      <select {...sel("postedWithin")} className={selectClass} aria-label="Posted within">
+      <select {...sel("postedWithin")} className={`${selectClass} w-full sm:w-auto`} aria-label="Posted within">
         <option value="">Any time</option>
         <option value="24h">Last 24 hours</option>
         <option value="7d">Last 7 days</option>
         <option value="30d">Last 30 days</option>
       </select>
 
-      <select {...sel("sort")} className={selectClass} aria-label="Sort">
+      <select {...sel("sort")} className={`${selectClass} w-full sm:w-auto`} aria-label="Sort">
         <option value="">Sort: newest</option>
         <option value="relevant">Sort: relevance</option>
         <option value="salary_desc">Sort: salary</option>
       </select>
 
-      <label className="flex items-center gap-2 text-sm text-slate-700">
+      <label className="col-span-2 flex items-center gap-2 rounded-md px-1 py-1 text-sm text-slate-700 sm:col-span-1 sm:px-2 dark:text-slate-300">
         <input
           type="checkbox"
           checked={searchParams.get("remote") === "true"}
@@ -109,6 +113,7 @@ export function JobSearchControls() {
         />
         Remote only
       </label>
+      </div>
     </div>
   );
 }

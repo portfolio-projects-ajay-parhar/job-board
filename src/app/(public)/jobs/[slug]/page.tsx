@@ -25,10 +25,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const Section = ({ title, html }: { title: string; html: string | null }) =>
   html ? (
     <section className="mt-8">
-      <h2 className="text-lg font-bold text-slate-900">{title}</h2>
+      <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">{title}</h2>
       {/* sanitized on write AND at render — belt and braces */}
       <div
-        className="mt-2 max-w-none text-sm leading-relaxed text-slate-600 [&_li]:ml-4 [&_li]:list-disc [&_p]:my-2 [&_ul]:my-2"
+        className="mt-2 max-w-none text-sm leading-relaxed text-slate-600 dark:text-slate-300 [&_li]:ml-4 [&_li]:list-disc [&_p]:my-2 [&_ul]:my-2"
         dangerouslySetInnerHTML={{ __html: sanitizeRichText(html) }}
       />
     </section>
@@ -115,7 +115,7 @@ export default async function JobDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
 
-      <nav className="text-sm text-slate-500">
+      <nav className="text-sm text-slate-500 dark:text-slate-400">
         <Link href="/jobs" className="hover:underline">Jobs</Link>
         {" / "}
         <Link href={`/companies/${job.company.slug}`} className="hover:underline">{job.company.name}</Link>
@@ -123,37 +123,37 @@ export default async function JobDetailPage({ params }: Props) {
 
       <div className="mt-4 grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <div className="rounded-xl border border-slate-200 bg-white p-6">
+          <div className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <h1 className="text-3xl font-bold text-slate-900">{job.title}</h1>
-                <p className="mt-2 text-slate-500">
-                  <Link href={`/companies/${job.company.slug}`} className="font-medium text-slate-700 hover:underline">
+                <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-slate-100">{job.title}</h1>
+                <p className="mt-2 text-slate-500 dark:text-slate-400">
+                  <Link href={`/companies/${job.company.slug}`} className="font-medium text-slate-700 hover:underline dark:text-slate-300">
                     {job.company.name}
                   </Link>
-                  {job.company.isVerified && <span className="ml-1 text-emerald-600" title="Verified">✓</span>}
+                  {job.company.isVerified && <span className="ml-1 text-emerald-600 dark:text-emerald-400" title="Verified">✓</span>}
                   {" · "}
                   {[job.location, job.locationType, job.type, job.experienceLevel].filter(Boolean).join(" · ")}
                   {job.viewCount > 0 ? ` · ${job.viewCount} views` : ""}
                 </p>
-                <p className="mt-2 text-lg font-semibold text-slate-800">
+                <p className="mt-2 text-lg font-semibold text-slate-800 dark:text-slate-200">
                   {formatSalary(job.salaryMinCents, job.salaryMaxCents, job.salaryPeriod)}
                 </p>
               </div>
               {job.status !== "PUBLISHED" && (
-                <span className="rounded-full bg-amber-100 px-3 py-1 text-sm font-medium text-amber-700">
+                <span className="rounded-full bg-amber-100 px-3 py-1 text-sm font-medium text-amber-700 dark:bg-amber-400/10 dark:text-amber-400">
                   {job.status === "CLOSED" ? "Closed" : "Draft"}
                 </span>
               )}
             </div>
 
             {deadlinePassed && (
-              <p className="mt-4 rounded-md bg-red-50 px-4 py-3 text-sm text-red-600">
+              <p className="mt-4 rounded-md bg-red-50 px-4 py-3 text-sm text-red-600 dark:bg-red-950/40 dark:text-red-400">
                 ⚠ The application deadline for this role has passed.
               </p>
             )}
             {!deadlinePassed && deadlineSoon && (
-              <p className="mt-4 rounded-md bg-amber-50 px-4 py-3 text-sm text-amber-700">
+              <p className="mt-4 rounded-md bg-amber-50 px-4 py-3 text-sm text-amber-700 dark:bg-amber-950/40 dark:text-amber-400">
                 ⏳ Applications close {job.applicationDeadline?.toLocaleDateString("en-US")} — apply soon!
               </p>
             )}
@@ -166,7 +166,7 @@ export default async function JobDetailPage({ params }: Props) {
 
           {related.length > 0 && (
             <section className="mt-10">
-              <h2 className="text-lg font-bold text-slate-900">Related {job.category.toLowerCase()} jobs</h2>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Related {job.category.toLowerCase()} jobs</h2>
               <div className="mt-4 flex flex-col gap-3">
                 {related.map((r) => (
                   <JobCard
@@ -194,16 +194,16 @@ export default async function JobDetailPage({ params }: Props) {
 
         <div className="flex flex-col gap-4">
           <JobActions job={{ id: job.id, slug: job.slug, status: job.status, deadlinePassed }} />
-          <div className="rounded-xl border border-slate-200 bg-white p-5">
-            <p className="font-semibold text-slate-900">{job.company.name}</p>
+          <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <p className="font-semibold text-slate-900 dark:text-slate-100">{job.company.name}</p>
             {job.company.isVerified && (
-              <span className="mt-1 inline-block rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">
+              <span className="mt-1 inline-block rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-400">
                 ✓ Verified
               </span>
             )}
             <Link
               href={`/companies/${job.company.slug}`}
-              className="mt-3 block text-sm font-medium text-blue-600 hover:underline"
+              className="mt-3 block text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
             >
               View company profile →
             </Link>

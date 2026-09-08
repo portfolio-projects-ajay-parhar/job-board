@@ -22,10 +22,10 @@ type JobRow = {
 };
 
 const STATUS_STYLES: Record<string, string> = {
-  DRAFT: "bg-slate-100 text-slate-600",
-  PUBLISHED: "bg-emerald-100 text-emerald-700",
-  CLOSED: "bg-amber-100 text-amber-700",
-  ARCHIVED: "bg-red-100 text-red-600",
+  DRAFT: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300",
+  PUBLISHED: "bg-emerald-100 text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-400",
+  CLOSED: "bg-amber-100 text-amber-700 dark:bg-amber-400/10 dark:text-amber-400",
+  ARCHIVED: "bg-red-100 text-red-600 dark:bg-red-400/10 dark:text-red-400",
 };
 
 const ACTION_LABELS: Record<string, string> = {
@@ -68,13 +68,15 @@ export function JobsTable() {
 
   return (
     <div>
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {FILTERS.map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
             className={`rounded-full px-3 py-1 text-xs font-medium ${
-              filter === f ? "bg-slate-900 text-white" : "border border-slate-300 text-slate-600 hover:bg-slate-100"
+              filter === f
+                ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900"
+                : "border border-slate-300 text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
             }`}
           >
             {f}
@@ -82,9 +84,9 @@ export function JobsTable() {
         ))}
       </div>
 
-      <div className="mt-4 overflow-x-auto rounded-xl border border-slate-200 bg-white">
-        <table className="w-full text-left text-sm">
-          <thead className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500">
+      <div className="mt-4 overflow-x-auto rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+        <table className="w-full min-w-[720px] text-left text-sm">
+          <thead className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500 dark:border-slate-800 dark:text-slate-400">
             <tr>
               <th className="px-4 py-3">Title</th>
               <th className="px-4 py-3">Status</th>
@@ -96,9 +98,9 @@ export function JobsTable() {
           </thead>
           <tbody>
             {jobs.map((job) => (
-              <tr key={job.id} className="border-b border-slate-100 last:border-0">
+              <tr key={job.id} className="border-b border-slate-100 dark:border-slate-800 last:border-0">
                 <td className="px-4 py-3">
-                  <Link href={`/employer/jobs/${job.id}/edit`} className="font-medium text-slate-900 hover:underline">
+                  <Link href={`/employer/jobs/${job.id}/edit`} className="font-medium text-slate-900 hover:underline dark:text-slate-100">
                     {job.title}
                   </Link>
                 </td>
@@ -107,18 +109,18 @@ export function JobsTable() {
                     {job.status}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-slate-600">
+                <td className="px-4 py-3 text-slate-600 dark:text-slate-400">
                   {formatSalary(job.salaryMinCents, job.salaryMaxCents, job.salaryPeriod as never)}
                 </td>
-                <td className="px-4 py-3 text-slate-600">{job.viewCount}</td>
-                <td className="px-4 py-3 text-slate-600">{job.applicationCount}</td>
+                <td className="px-4 py-3 text-slate-600 dark:text-slate-400">{job.viewCount}</td>
+                <td className="px-4 py-3 text-slate-600 dark:text-slate-400">{job.applicationCount}</td>
                 <td className="flex flex-wrap gap-1 px-4 py-3">
                   {jobStatusActions(job.status).map((action) => (
                     <button
                       key={action}
                       disabled={statusMutation.isPending}
                       onClick={() => statusMutation.mutate({ id: job.id, status: action })}
-                      className="rounded-md border border-slate-300 px-2 py-1 text-xs hover:bg-slate-100 disabled:opacity-50"
+                      className="rounded-md border border-slate-300 px-2 py-1 text-xs hover:bg-slate-100 disabled:opacity-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
                     >
                       {ACTION_LABELS[action] ?? action}
                     </button>
@@ -126,7 +128,7 @@ export function JobsTable() {
                   {job.status !== "ARCHIVED" && (
                     <Link
                       href={`/employer/jobs/${job.id}/edit`}
-                      className="rounded-md border border-slate-300 px-2 py-1 text-xs hover:bg-slate-100"
+                      className="rounded-md border border-slate-300 px-2 py-1 text-xs hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
                     >
                       Edit
                     </Link>
@@ -136,7 +138,7 @@ export function JobsTable() {
             ))}
             {jobs.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-10 text-center text-slate-500">
+                <td colSpan={6} className="px-4 py-10 text-center text-slate-500 dark:text-slate-400">
                   No jobs in this view yet.
                 </td>
               </tr>

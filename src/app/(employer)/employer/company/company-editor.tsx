@@ -24,7 +24,7 @@ const SIZES = [
 ] as const;
 
 const inputClass =
-  "w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-900 focus:outline-none";
+  "w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-slate-900 focus:outline-none dark:border-slate-700 dark:focus:border-slate-400";
 
 export function CompanyEditor() {
   const { toast } = useToast();
@@ -65,27 +65,27 @@ export function CompanyEditor() {
     }
   }
 
-  if (!company) return <p className="text-sm text-slate-500">Loading…</p>;
+  if (!company) return <p className="text-sm text-slate-500 dark:text-slate-400">Loading…</p>;
 
   return (
-    <form onSubmit={onSubmit} className="flex max-w-2xl flex-col gap-4 rounded-xl border border-slate-200 bg-white p-6">
+    <form onSubmit={onSubmit} className="flex max-w-2xl flex-col gap-4 rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
       <div className="flex items-center gap-4">
-        <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-100 text-xl font-bold text-slate-400">
+        <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-100 text-xl font-bold text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-500">
           {company.logoUrl ? "IMG" : company.name.charAt(0)}
         </div>
         <label className="flex flex-col gap-1 text-sm">
-          <span className="font-medium text-slate-700">Logo (PNG/JPEG/WebP, ≤ 2 MB)</span>
+          <span className="font-medium text-slate-700 dark:text-slate-300">Logo (PNG/JPEG/WebP, ≤ 2 MB)</span>
           <input
             type="file"
             accept="image/png,image/jpeg,image/webp"
             onChange={(e) => setLogoFile(e.target.files?.[0] ?? null)}
-            className="text-sm text-slate-600 file:mr-3 file:rounded-md file:border-0 file:bg-slate-900 file:px-3 file:py-1.5 file:text-white"
+            className="text-sm text-slate-600 file:mr-3 file:rounded-md file:border-0 file:bg-slate-900 file:px-3 file:py-1.5 file:text-white dark:text-slate-400 dark:file:bg-slate-100 dark:file:text-slate-900"
           />
         </label>
       </div>
 
       <label className="flex flex-col gap-1 text-sm">
-        <span className="font-medium text-slate-700">Company name</span>
+        <span className="font-medium text-slate-700 dark:text-slate-300">Company name</span>
         <input
           required
           minLength={2}
@@ -95,9 +95,9 @@ export function CompanyEditor() {
         />
       </label>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <label className="flex flex-col gap-1 text-sm">
-          <span className="font-medium text-slate-700">Website</span>
+          <span className="font-medium text-slate-700 dark:text-slate-300">Website</span>
           <input
             type="url"
             value={company.website ?? ""}
@@ -107,7 +107,7 @@ export function CompanyEditor() {
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
-          <span className="font-medium text-slate-700">Location</span>
+          <span className="font-medium text-slate-700 dark:text-slate-300">Location</span>
           <input
             value={company.location ?? ""}
             onChange={(e) => setCompany({ ...company, location: e.target.value })}
@@ -116,9 +116,9 @@ export function CompanyEditor() {
         </label>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <label className="flex flex-col gap-1 text-sm">
-          <span className="font-medium text-slate-700">Industry</span>
+          <span className="font-medium text-slate-700 dark:text-slate-300">Industry</span>
           <input
             value={company.industry ?? ""}
             onChange={(e) => setCompany({ ...company, industry: e.target.value })}
@@ -126,7 +126,7 @@ export function CompanyEditor() {
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
-          <span className="font-medium text-slate-700">Size</span>
+          <span className="font-medium text-slate-700 dark:text-slate-300">Size</span>
           <select
             value={company.size}
             onChange={(e) => setCompany({ ...company, size: e.target.value })}
@@ -142,7 +142,7 @@ export function CompanyEditor() {
       </div>
 
       <label className="flex flex-col gap-1 text-sm">
-        <span className="font-medium text-slate-700">Description</span>
+        <span className="font-medium text-slate-700 dark:text-slate-300">Description</span>
         <textarea
           rows={4}
           value={company.description ?? ""}
@@ -154,7 +154,7 @@ export function CompanyEditor() {
       <button
         type="submit"
         disabled={saving || uploading}
-        className="self-start rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-50"
+        className="self-start rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-50 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300"
       >
         {saving ? "Saving…" : uploading ? "Uploading logo…" : "Save profile"}
       </button>

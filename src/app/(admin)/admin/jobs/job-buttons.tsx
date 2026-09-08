@@ -34,7 +34,9 @@ export function JobModerationButtons({
       <button
         onClick={() => patch({ featured: !featured }, featured ? "Removed from featured" : "Job featured")}
         className={`rounded-md px-2 py-1 text-xs font-medium ${
-          featured ? "bg-amber-100 text-amber-700" : "border border-slate-300 text-slate-600 hover:bg-slate-100"
+          featured
+            ? "bg-amber-100 text-amber-700 dark:bg-amber-400/10 dark:text-amber-400"
+            : "border border-slate-300 text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
         }`}
       >
         {featured ? "★ Unfeature" : "☆ Feature"}
@@ -42,7 +44,7 @@ export function JobModerationButtons({
       {status !== "CLOSED" && (
         <button
           onClick={() => patch({ close: true }, "Job closed")}
-          className="rounded-md border border-red-200 px-2 py-1 text-xs text-red-600 hover:bg-red-50"
+          className="rounded-md border border-red-200 px-2 py-1 text-xs text-red-600 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950/50"
         >
           Close
         </button>

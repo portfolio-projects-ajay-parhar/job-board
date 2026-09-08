@@ -61,14 +61,14 @@ export function ApplicationsTracker() {
     },
   });
 
-  if (isLoading) return <p className="text-sm text-slate-500">Loading…</p>;
+  if (isLoading) return <p className="text-sm text-slate-500 dark:text-slate-400">Loading…</p>;
   const items = data?.items ?? [];
 
   if (items.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-slate-300 bg-white p-12 text-center">
-        <p className="text-slate-600">You haven&apos;t applied to any jobs yet.</p>
-        <Link href="/jobs" className="mt-2 inline-block text-sm font-medium text-blue-600 hover:underline">
+      <div className="rounded-xl border border-dashed border-slate-300 bg-white p-12 text-center dark:border-slate-700 dark:bg-slate-900">
+        <p className="text-slate-600 dark:text-slate-300">You haven&apos;t applied to any jobs yet.</p>
+        <Link href="/jobs" className="mt-2 inline-block text-sm font-medium text-blue-600 hover:underline dark:text-blue-400">
           Browse jobs
         </Link>
       </div>
@@ -82,7 +82,7 @@ export function ApplicationsTracker() {
         if (apps.length === 0) return null;
         return (
           <section key={group.label}>
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
               {group.label} ({apps.length})
             </h2>
             <div className="mt-3 flex flex-col gap-3">
@@ -90,23 +90,23 @@ export function ApplicationsTracker() {
                 const canWithdraw = canTransitionApplication(a.status, "WITHDRAWN");
                 const open = expanded === a.id;
                 return (
-                  <div key={a.id} className="rounded-xl border border-slate-200 bg-white p-5">
+                  <div key={a.id} className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div>
-                        <Link href={`/jobs/${a.job.slug}`} className="font-semibold text-slate-900 hover:underline">
+                        <Link href={`/jobs/${a.job.slug}`} className="font-semibold text-slate-900 hover:underline dark:text-slate-100">
                           {a.job.title}
                         </Link>
-                        <p className="mt-1 text-sm text-slate-500">
+                        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                           {a.job.company.name} · applied {ago(a.submittedAt)} · resume: {a.resume.fileName}
                         </p>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${STATUS_STYLES[a.status]}`}>
                           {a.status}
                         </span>
                         <button
                           onClick={() => setExpanded(open ? null : a.id)}
-                          className="rounded-md border border-slate-300 px-3 py-1.5 text-xs hover:bg-slate-100"
+                          className="rounded-md border border-slate-300 px-3 py-1.5 text-xs hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
                         >
                           {open ? "Hide timeline" : "Timeline"}
                         </button>
@@ -116,7 +116,7 @@ export function ApplicationsTracker() {
                               if (confirm(`Withdraw application to "${a.job.title}"?`)) withdraw.mutate(a.id);
                             }}
                             disabled={withdraw.isPending}
-                            className="rounded-md border border-red-200 px-3 py-1.5 text-xs text-red-600 hover:bg-red-50"
+                            className="rounded-md border border-red-200 px-3 py-1.5 text-xs text-red-600 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950/50"
                           >
                             Withdraw
                           </button>
@@ -125,15 +125,15 @@ export function ApplicationsTracker() {
                     </div>
 
                     {open && (
-                      <ol className="mt-4 border-l-2 border-slate-200 pl-4">
+                      <ol className="mt-4 border-l-2 border-slate-200 pl-4 dark:border-slate-700">
                         {a.events.map((e) => (
                           <li key={e.id} className="relative pb-4 last:pb-0">
-                            <span className="absolute -left-[22px] top-1 h-3 w-3 rounded-full bg-slate-900" />
-                            <p className="text-sm font-medium text-slate-800">
+                            <span className="absolute -left-[22px] top-1 h-3 w-3 rounded-full bg-slate-900 dark:bg-slate-100" />
+                            <p className="text-sm font-medium text-slate-800 dark:text-slate-200">
                               {e.fromStatus ? `${e.fromStatus} → ${e.toStatus}` : e.toStatus}
                             </p>
-                            {e.note && <p className="text-xs text-slate-500">{e.note}</p>}
-                            <p className="text-xs text-slate-400">{new Date(e.createdAt).toLocaleString("en-US")}</p>
+                            {e.note && <p className="text-xs text-slate-500 dark:text-slate-400">{e.note}</p>}
+                            <p className="text-xs text-slate-400 dark:text-slate-500">{new Date(e.createdAt).toLocaleString("en-US")}</p>
                           </li>
                         ))}
                       </ol>

@@ -97,7 +97,7 @@ export function JobActions({ job }: { job: JobMeta }) {
   if (notApplicable) return null;
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-5">
+    <div className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
       {/* Save toggle (candidates, open jobs) */}
       {isCandidate && !closed && (
         <button
@@ -105,8 +105,8 @@ export function JobActions({ job }: { job: JobMeta }) {
           disabled={busy}
           className={`mb-3 w-full rounded-md border px-4 py-2 text-sm font-medium ${
             saved
-              ? "border-amber-300 bg-amber-50 text-amber-700"
-              : "border-slate-300 text-slate-700 hover:bg-slate-100"
+              ? "border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-400/30 dark:bg-amber-400/10 dark:text-amber-400"
+              : "border-slate-300 text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
           }`}
         >
           {saved ? "★ Saved" : "☆ Save job"}
@@ -152,7 +152,7 @@ export function JobActions({ job }: { job: JobMeta }) {
       {isCandidate && !closed && !applied && showForm && (
         <form onSubmit={onApply} className="flex flex-col gap-3">
           <label className="text-sm">
-            <span className="font-medium text-slate-700">Resume</span>
+            <span className="font-medium text-slate-700 dark:text-slate-300">Resume</span>
             <select
               value={resumeId}
               onChange={(e) => setResumeId(e.target.value)}
@@ -175,7 +175,7 @@ export function JobActions({ job }: { job: JobMeta }) {
             )}
           </label>
           <label className="text-sm">
-            <span className="font-medium text-slate-700">Cover letter (optional)</span>
+            <span className="font-medium text-slate-700 dark:text-slate-300">Cover letter (optional)</span>
             <textarea
               rows={4}
               maxLength={5000}

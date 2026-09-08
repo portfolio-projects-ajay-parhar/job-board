@@ -30,16 +30,20 @@ export const metadata: Metadata = {
 
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  const themeScript = `(function(){try{var t=localStorage.getItem("theme");var d=t==="dark"||((!t||t==="system")&&window.matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.classList.toggle("dark",d)}catch(e){}})()`;
+
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="flex min-h-full flex-col bg-slate-50">
+      <body className="flex min-h-full flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <Providers>
           <SiteHeader />
           <main className="flex-1">{children}</main>
-          <footer className="border-t border-slate-200 bg-white py-6 text-center text-sm text-slate-500">
+          <footer className="border-t border-slate-200 bg-white py-6 text-center text-sm text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
             © {new Date().getFullYear()} JobBoard — built with Next.js, Prisma &amp; PostgreSQL
           </footer>
         </Providers>

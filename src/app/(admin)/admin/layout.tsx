@@ -19,13 +19,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold text-slate-900">Admin panel</h1>
-        <nav className="flex gap-2 text-sm">
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Admin panel</h1>
+        <nav className="flex flex-wrap gap-2 text-sm">
           {nav.map(([href, label]) => (
             <Link
               key={href}
               href={href}
-              className="rounded-md border border-slate-300 bg-white px-3 py-1.5 hover:bg-slate-100"
+              className="rounded-md border border-slate-300 bg-white px-3 py-1.5 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800"
             >
               {label}
             </Link>

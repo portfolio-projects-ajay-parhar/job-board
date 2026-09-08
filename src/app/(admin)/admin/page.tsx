@@ -32,24 +32,24 @@ export default async function AdminPage() {
     <div>
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {kpis.map((k) => (
-          <div key={k.label} className="rounded-xl border border-slate-200 bg-white p-5">
-            <p className="text-3xl font-bold text-slate-900">{k.value}</p>
-            <p className="mt-1 text-sm font-medium text-slate-600">{k.label}</p>
-            <p className="mt-1 text-xs text-slate-400">{k.detail}</p>
+          <div key={k.label} className="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <p className="text-3xl font-bold text-slate-900 dark:text-slate-100">{k.value}</p>
+            <p className="mt-1 text-sm font-medium text-slate-600 dark:text-slate-300">{k.label}</p>
+            <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">{k.detail}</p>
           </div>
         ))}
       </div>
 
-      <section className="mt-8 rounded-xl border border-slate-200 bg-white p-6">
-        <h2 className="text-lg font-bold text-slate-900">Last 30 days</h2>
-        <p className="text-sm text-slate-500">Signups (dark) and applications (emerald) per day</p>
+      <section className="mt-8 rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+        <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Last 30 days</h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400">Signups (dark) and applications (emerald) per day</p>
         <div className="mt-4 flex h-32 items-end gap-1">
           {series.map((s) => {
             const total = Number(s.signups) + Number(s.applications);
             return (
               <div key={s.day.toISOString()} className="flex flex-1 flex-col justify-end gap-0.5" title={`${s.day.toISOString().slice(0, 10)}: ${s.signups} signups, ${s.applications} applications`}>
-                <div className="rounded-t bg-emerald-500" style={{ height: `${(Number(s.applications) / maxSeries) * 100}%` }} />
-                <div className="bg-slate-800" style={{ height: `${(Number(s.signups) / maxSeries) * 100}%` }} />
+                <div className="rounded-t bg-emerald-500 dark:bg-emerald-400" style={{ height: `${(Number(s.applications) / maxSeries) * 100}%` }} />
+                <div className="bg-slate-800 dark:bg-slate-500" style={{ height: `${(Number(s.signups) / maxSeries) * 100}%` }} />
               </div>
             );
           })}
