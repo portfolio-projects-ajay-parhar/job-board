@@ -7,6 +7,24 @@ A production-shaped **job board** connecting employers, candidates, and admins �
 [![CI](https://github.com/YOUR_GH_USERNAME/job-board/actions/workflows/ci.yml/badge.svg)](./.github/workflows/ci.yml)
 <!-- ↑ after pushing to GitHub, replace YOUR_GH_USERNAME with your account -->
 
+## Demo & Screenshots
+
+**Demo walkthrough** — guest full-text search → sign-in → candidate tracker → employer hiring pipeline → admin KPIs (captured from the seeded dev build at 1440×900):
+
+<img alt="JobBoard demo walkthrough" src="public/screenshots/demo.gif" width="860">
+
+| Home — hero search, featured jobs, verified companies | Full-text search — “senior react” | Job detail — apply flow |
+|---|---|---|
+| ![Home page](public/screenshots/home.png) | ![Full-text search results](public/screenshots/search.png) | ![Job detail](public/screenshots/job-detail.png) |
+
+| Jobs listing — filters | Sign in — role-aware credentials | Candidate — application tracker |
+|---|---|---|
+| ![Jobs listing](public/screenshots/jobs-listing.png) | ![Sign in](public/screenshots/signin.png) | ![Candidate tracker](public/screenshots/candidate-dashboard.png) |
+
+| Employer — KPIs & per-job funnel | Employer — hiring pipeline (kanban) | Admin — platform KPIs & 30-day chart |
+|---|---|---|
+| ![Employer dashboard](public/screenshots/employer-dashboard.png) | ![Hiring pipeline](public/screenshots/employer-pipeline.png) | ![Admin dashboard](public/screenshots/admin-dashboard.png) |
+
 ## Table of Contents
 
 1. [Problem](#problem)
