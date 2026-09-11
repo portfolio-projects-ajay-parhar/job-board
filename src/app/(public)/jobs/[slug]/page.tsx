@@ -104,9 +104,10 @@ export default async function JobDetailPage({ params }: Props) {
       : {}),
   };
 
-  const deadlinePassed = job.applicationDeadline ? job.applicationDeadline.getTime() < Date.now() : false;
+  const now = Date.now(); // eslint-disable-line react-hooks/purity -- server component evaluates once per request
+  const deadlinePassed = job.applicationDeadline ? job.applicationDeadline.getTime() < now : false;
   const deadlineSoon =
-    job.applicationDeadline && !deadlinePassed && job.applicationDeadline.getTime() - Date.now() < 7 * 86_400_000;
+    job.applicationDeadline && !deadlinePassed && job.applicationDeadline.getTime() - now < 7 * 86_400_000;
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">

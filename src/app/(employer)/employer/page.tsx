@@ -10,7 +10,7 @@ export default async function EmployerDashboardPage() {
   const company = await prisma.company.findUnique({ where: { ownerUserId: session.user.id } });
   if (!company) return null;
 
-  const weekAgo = new Date(Date.now() - 7 * 86_400_000);
+  const weekAgo = new Date(Date.now() - 7 * 86_400_000); // eslint-disable-line react-hooks/purity -- server component evaluates once per request
   const [activeJobs, totalJobs, applicationsTotal, applicationsThisWeek, recent, jobs] = await Promise.all([
     prisma.job.count({ where: { companyId: company.id, status: "PUBLISHED" } }),
     prisma.job.count({ where: { companyId: company.id } }),

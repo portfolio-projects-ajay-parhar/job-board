@@ -39,6 +39,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Generate Prisma client
+        run: npx prisma generate
+
       - name: Apply migrations (incl. FTS + salary normalization raw SQL)
         run: npx prisma migrate deploy
 
